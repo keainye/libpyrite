@@ -3,7 +3,7 @@
 PrtPackage::PrtPackage() {
     this->Body="invalid";
     this->Identifier="invalid";
-    this->sequence=0;
+    this->sequence=-1;
     this->Session="invalid";
 }
 
@@ -20,18 +20,10 @@ PrtPackage PrtPackage::CastToPrtPackage(std::string raw) {
 	if (splits.size() < 5) {
 		return PrtPackage();
 	}
+    const char *seq = splits[2].c_str();
+	int sequence=atoi(seq);
 
-	int sequence=atoi(splits[2]);
-	if err != nil {
-		return nil, ErrInvalidResponse
-	}
-
-	return &PrtPackage{
-		Session:    splits[0],
-		Identifier: splits[1],
-		sequence:   sequence,
-		Body:       splits[4],
-	}, nil
+	return PrtPackage(splits[0],splits[1],sequence,splits[4]);
 }
 
 std::string PrtPackage::ToBytes() {
