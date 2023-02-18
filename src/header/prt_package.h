@@ -1,9 +1,9 @@
-class response
+class PrtPackage
 {
 private:
     /* data */
 public:
-    response(/* args */);
-    ~response();
+    PrtPackage(/* args */);
+    ~PrtPackage();
 };
 
