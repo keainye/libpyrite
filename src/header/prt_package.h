@@ -1,9 +1,16 @@
+#include"prt_string.h"
 class PrtPackage
 {
-private:
-    /* data */
 public:
-    PrtPackage(/* args */);
-    ~PrtPackage();
+   std::string Session;
+   std::string Identifier;
+   int sequence;
+   std::string Body;
+   PrtPackage();
+
+   PrtPackage(std::string Session, std::string Identifier, int sequence,std::string Body);
+   ~PrtPackage();
+   PrtPackage CastToPrtPackage(std::string raw);
+   std::string ToBytes();
 };
 
