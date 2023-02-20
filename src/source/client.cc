@@ -77,15 +77,22 @@ std::string client::Promise(std::string identifier, std::string body)
         ch.lock();
         getlock = lock;
         ch.unlock();
+        this->bufferL[req.sequence]->lock();
         if (this->promiseBuffer[req.sequence].Identifier == "prt-ack")
         {
             respbody = this->promiseBuffer[req.sequence].Body;
             this->promiseBuffer.erase(req.sequence);
+            this->bufferL[req.sequence]->unlock();
+            delete(this->bufferL[req.sequence]);
+            this->bufferL.erase(req.sequence);
             break;
         }
         
+            this->bufferL[req.sequence]->unlock();
         if (getlock)
         {
+            delete(this->bufferL[req.sequence]);
+            this->bufferL.erase(req.sequence);
             std::cout << "pyrite counterpart timeouted" << std::endl;
             return;
         }
@@ -114,7 +121,9 @@ void client::processAck(PrtPackage p)
     {
         return;
     }
+    this->bufferL[p.sequence]->lock();
     this->promiseBuffer[p.sequence] = p;
+    this->bufferL[p.sequence]->unlock();
 }
 
 void client::process(std::string raw)
