@@ -7,6 +7,7 @@ private:
     std::string session;
     int sequence;
     int timeout;
+    std::unordered_map<int, std::mutex *> bufferL;
     std::unordered_map<int, PrtPackage> promiseBuffer;
     SOCKET connection;
     void process(std::string raw);
