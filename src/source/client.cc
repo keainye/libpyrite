@@ -1,5 +1,5 @@
 #include <../header/client.h>
-client::client(const char *Ip, int port)
+client::client(const char *Ip, int port, int timeout)
 {
     WSADATA data;
 
@@ -18,10 +18,11 @@ client::client(const char *Ip, int port)
     {
         std::cout << "socket create error";
     }
-    
+
     this->connection = socketClient;
     this->server = addrServer;
     this->sequence = 0;
+    this->timeout = timeout;
 }
 
 bool client::AddRouter(std::string identifier, std::function<std::string(std::string)> controller)
@@ -47,14 +48,55 @@ client::~client()
     WSACleanup();
 }
 
-std::string Promise(std::string identifer, std::string body)
+std::string client::Promise(std::string identifier, std::string body)
 {
-    return "";
+    PrtPackage req(this->session, identifier, this->getSequence(), body);
+    std::string str_req = req.ToBytes();
+    const char *sendingMessage = (char *)str_req.data();
+    if (sizeof(sendingMessage) > MAX_TRANSMIT_SIZE)
+    {
+        std::cout << "content overflowed" << std::endl;
+        return "";
+    }
+
+    send(this->connection, sendingMessage, sizeof(sendingMessage), 0);
+    this->promiseBuffer[req.sequence] = req;
+    int time = this->timeout;
+    std::mutex ch;
+    bool lock = 0;
+    std::thread time([&](int time)
+                     {
+        Sleep(time);
+        ch.lock();
+        lock=1;
+        ch.unlock(); });
+    bool getlock;
+    std::string respbody;
+    while (1)
+    {
+        ch.lock();
+        getlock = lock;
+        ch.unlock();
+        if (this->promiseBuffer[req.sequence].Identifier == "prt-ack")
+        {
+            respbody = this->promiseBuffer[req.sequence].Body;
+            this->promiseBuffer.erase(req.sequence);
+            break;
+        }
+        
+        if (getlock)
+        {
+            std::cout << "pyrite counterpart timeouted" << std::endl;
+            return;
+        }
+    }
+
+    return respbody;
 }
 
-int client::Tell(std::string identifer, std::string body)
+int client::Tell(std::string identifier, std::string body)
 {
-    PrtPackage P(this->session, identifer, -1, body);
+    PrtPackage P(this->session, identifier, -1, body);
     std::string strP = P.ToBytes();
     const char *sendingMessage = (char *)strP.data();
     if (sizeof(sendingMessage) > MAX_TRANSMIT_SIZE)
@@ -68,6 +110,11 @@ int client::Tell(std::string identifer, std::string body)
 
 void client::processAck(PrtPackage p)
 {
+    if (this->promiseBuffer.find(p.sequence) == this->promiseBuffer.end())
+    {
+        return;
+    }
+    this->promiseBuffer[p.sequence] = p;
 }
 
 void client::process(std::string raw)

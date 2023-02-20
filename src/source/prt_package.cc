@@ -25,7 +25,7 @@ PrtPackage::PrtPackage(std::string raw)
     {
         return;
     }
-    
+
     const char *seq = splits[2].c_str();
     int sequence = atoi(seq);
 
@@ -37,5 +37,7 @@ PrtPackage::PrtPackage(std::string raw)
 
 std::string PrtPackage::ToBytes()
 {
-    return format("%s\n%s\n%d\n\n%s", this->Session, this->Identifier, this->sequence, this->Body);
+    return this->Session + "\n" + this->Identifier + "\n" + std::to_string(this->sequence) +
+           "\n\n" +
+           this->Body + "\n";
 }

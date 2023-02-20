@@ -4,17 +4,6 @@
 #include <unordered_map>
 #include <functional>
 
-template <class... T>
-std::string format(const char *fmt, const T &...t)
-{
-    const auto len = snprintf(nullptr, 0, fmt, t...);
-    std::string r;
-    r.resize(static_cast<size_t>(len) + 1);
-    snprintf(&r.front(), len + 1, fmt, t...);
-    r.resize(static_cast<size_t>(len));
-    return r;
-}
-
 const std::vector<std::string> split(const std::string &str, const std::string &pattern)
 {
     std::vector<std::string> result;
