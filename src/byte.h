@@ -10,21 +10,14 @@
 namespace prt {
 typedef unsigned char byte;
 typedef std::vector<byte> bytes;
-// class bytes {
-//  private:
-//   byte* core;
-//  public:
-//   int len;
-//   bytes();
-//   bytes(int _len);
-//   ~bytes();
-//   byte& operator[](int index);
-//   bytes operator+(bytes other);
-//   bytes& operator=(bytes& other);
-//   bytes range(int start, int end);
-//   void print();
-//   void println();
-// };
+bytes range(bytes& src, int start, int end) {
+  if (end <= start) return bytes();
+  int len = end-start;
+  bytes ret(len);
+  for (int i = 0; i < len; i++)
+    ret[i] = src[i];
+  return ret;
+}
 }  // namespace prt
 
 #endif
