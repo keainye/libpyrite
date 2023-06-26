@@ -26,3 +26,13 @@ prt::bytes prt::bytes::operator+(bytes other) {
     ret[ptr++] = other[i];
   return ret;
 }
+
+void prt::bytes::print() {
+  for (int i = 0; i < this->len; i++)
+    std::printf("%02x", this->core[i]);
+}
+
+void prt::bytes::println() {
+  this->print();
+  std::printf("\n");
+}

@@ -1,6 +1,8 @@
 #ifndef _PRT_BYTE
 #define _PRT_BYTE
 
+#include "iostream"
+
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
@@ -16,6 +18,8 @@ class bytes {
   ~bytes();
   byte& operator[](int index);
   bytes operator+(bytes other);
+  void print();
+  void println();
 };
 }  // namespace prt
 
