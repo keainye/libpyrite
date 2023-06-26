@@ -13,10 +13,10 @@ class package {
   bytes body;
 
   package();
-  // bytes to_bytes();
+  bytes to_bytes();
 };
 
-bool bytes_to_package(package& pac, bytes raw);
+bool to_package(package& pac, bytes raw);
 }  // namespace prt
 
 #endif
