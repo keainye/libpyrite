@@ -15,6 +15,7 @@ class bytes {
   bytes(int _len);
   ~bytes();
   byte& operator[](int index);
+  bytes operator+(bytes other);
 };
 }  // namespace prt
 

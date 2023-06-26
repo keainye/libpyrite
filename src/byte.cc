@@ -16,3 +16,13 @@ prt::bytes::~bytes() {
 prt::byte& prt::bytes::operator[](int index) {
   return this->core[index];
 }
+
+prt::bytes prt::bytes::operator+(bytes other) {
+  bytes ret(this->len + other.len);
+  int ptr = 0;
+  for (int i = 0; i < this->len; i++)
+    ret[ptr++] = this->core[i];
+  for (int i = 0; i < other.len; i++)
+    ret[ptr++] = other[i];
+  return ret;
+}
