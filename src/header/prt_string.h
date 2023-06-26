@@ -1,8 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <unordered_map>
-#include <functional>
 
 const std::vector<std::string> split(const std::string &str, const std::string &pattern)
 {
