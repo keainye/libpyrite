@@ -1,7 +1,0 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-
-PROJECT(Pyrite-cpp) 
-
-INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/header)
-
-ADD_LIBRARY( pyrite source/pyrite.cc source/server.cc source/client.cc source/response.cc source/request.cc)
