@@ -1,5 +1,7 @@
 #include "byte.h"
 
+prt::bytes::bytes(): len(0), core(nullptr) {}
+
 prt::bytes::bytes(int _len): len(max(0, _len)) {
   this->core = nullptr;
   if (_len <= 0) return;

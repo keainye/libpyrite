@@ -11,6 +11,7 @@ class bytes {
   byte* core;
  public:
   const int len;
+  bytes();
   bytes(int _len);
   ~bytes();
   byte& operator[](int index);
