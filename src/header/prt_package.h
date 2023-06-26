@@ -9,7 +9,7 @@ class PrtPackage
 public:
    std::string Session;
    std::string Identifier;
-   int sequence;
+   int Sequence;
    std::string Body;
    PrtPackage();
    PrtPackage(std::string raw);
