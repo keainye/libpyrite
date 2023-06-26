@@ -11,7 +11,12 @@ class package {
   std::string identifier;
   int sequence;
   bytes body;
+
+  package();
+  // bytes to_bytes();
 };
+
+bool bytes_to_package(package& pac, bytes raw);
 }  // namespace prt
 
 #endif
