@@ -34,6 +34,13 @@ std::string to_string(bytes& src) {
   str[end] = 0;
   return std::string(str);
 }
+
+bytes to_bytes(const std::string& str) {
+  bytes ret(str.size());
+  for (int i = 0; i < str.size(); i++)
+    ret[i] = str[i];
+  return ret;
+}
 }  // namespace prt
 
 #endif
