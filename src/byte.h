@@ -12,12 +12,13 @@ class bytes {
  private:
   byte* core;
  public:
-  const int len;
+  int len;
   bytes();
   bytes(int _len);
   ~bytes();
   byte& operator[](int index);
   bytes operator+(bytes other);
+  bytes& operator=(bytes& other);
   bytes range(int start, int end);
   void print();
   void println();

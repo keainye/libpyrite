@@ -27,6 +27,15 @@ prt::bytes prt::bytes::operator+(bytes other) {
   return ret;
 }
 
+prt::bytes& prt::bytes::operator=(bytes& other) {
+  this->len = other.len;
+  delete[] this->core;
+  this->core = new byte[this->len];
+  for (int i = 0; i < this->len; i++)
+    this->core[i] = other[i];
+  return *this;
+}
+
 prt::bytes prt::bytes::range(int start, int end) {
   if (end <= start) return bytes();
   int retlen = end-start;
