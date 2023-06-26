@@ -18,6 +18,7 @@ class bytes {
   ~bytes();
   byte& operator[](int index);
   bytes operator+(bytes other);
+  bytes range(int start, int end);
   void print();
   void println();
 };

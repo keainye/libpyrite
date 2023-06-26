@@ -27,6 +27,15 @@ prt::bytes prt::bytes::operator+(bytes other) {
   return ret;
 }
 
+prt::bytes prt::bytes::range(int start, int end) {
+  if (end <= start) return bytes();
+  int retlen = end-start;
+  bytes ret(retlen);
+  for (int i = 0; i < retlen; i++)
+    ret[i] = this->core[start+i];
+  return ret;
+}
+
 void prt::bytes::print() {
   for (int i = 0; i < this->len; i++)
     std::printf("%02x", this->core[i]);
