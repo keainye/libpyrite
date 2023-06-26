@@ -10,3 +10,7 @@ prt::bytes::~bytes() {
   if (!this->core) return;
   delete[] this->core;
 }
+
+prt::byte& prt::bytes::operator[](int index) {
+  return this->core[index];
+}

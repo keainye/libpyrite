@@ -13,6 +13,7 @@ class bytes {
   const int len;
   bytes(int _len);
   ~bytes();
+  byte& operator[](int index);
 };
 }  // namespace prt
 
