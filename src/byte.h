@@ -41,6 +41,16 @@ bytes to_bytes(const std::string& str) {
     ret[i] = str[i];
   return ret;
 }
+
+bytes operator+(const bytes& v1, const bytes& v2) {
+  bytes ret(v1.size()+v2.size());
+  int ptr = 0;
+  for (int i = 0; i < v1.size(); i++)
+    ret[ptr++] = v1[i];
+  for (int i = 0; i < v2.size(); i++)
+    ret[ptr++] = v2[i];
+  return ret;
+}
 }  // namespace prt
 
 #endif
