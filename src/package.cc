@@ -61,3 +61,7 @@ bool prt::package::operator==(const prt::package& other) {
   if (other.body != this->body) return false;
   return true;
 }
+
+bool prt::package::operator!=(const prt::package& other) {
+  return !(this->operator==(other));
+}
