@@ -39,6 +39,7 @@ bool prt::to_package(package& pac, bytes raw) {
   pac.identifier = identifier;
   pac.sequence = seq;
   pac.body = prt::range(raw, idx[3]+1, raw.size());
+  return true;
 }
 
 prt::bytes prt::package::to_bytes() {
