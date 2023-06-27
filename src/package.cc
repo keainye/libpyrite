@@ -53,6 +53,7 @@ prt::bytes prt::package::to_bytes() {
   headers += "\n";
   headers += "\n";
   bytes ret = prt::to_bytes(headers);
+  ret = range(ret, 0, ret.size()-1);
   ret = ret + this->body;
   return ret;
 }
