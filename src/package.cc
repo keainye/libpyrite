@@ -69,3 +69,10 @@ bool prt::package::operator==(const prt::package& other) {
 bool prt::package::operator!=(const prt::package& other) {
   return !(this->operator==(other));
 }
+
+void prt::package::set_body(std::string text) {
+  this->body = prt::to_bytes(text);
+}
+std::string prt::package::body_as_string() {
+  return to_string(this->body);
+}

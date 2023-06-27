@@ -16,6 +16,9 @@ class package {
   bytes to_bytes();
   bool operator==(const package& other);
   bool operator!=(const package& other);
+
+  void set_body(std::string text);
+  std::string body_as_string();
 };
 
 bool to_package(package& pac, bytes raw);
