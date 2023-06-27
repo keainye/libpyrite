@@ -53,3 +53,11 @@ prt::bytes prt::package::to_bytes() {
   ret = ret + this->body;
   return ret;
 }
+
+bool prt::package::operator==(const prt::package& other) {
+  if (other.session != this->session) return false;
+  if (other.identifier != this->identifier) return false;
+  if (other.sequence != this->sequence) return false;
+  if (other.body != this->body) return false;
+  return true;
+}
