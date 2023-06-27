@@ -16,7 +16,7 @@ bytes range(bytes& src, int start, int end) {
   int len = end-start;
   bytes ret(len);
   for (int i = 0; i < len; i++)
-    ret[i] = src[i];
+    ret[i] = src[start+i];
   return ret;
 }
 
