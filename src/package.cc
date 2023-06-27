@@ -46,7 +46,9 @@ prt::bytes prt::package::to_bytes() {
   headers += "\n";
   headers += this->identifier;
   headers += "\n";
-  headers += this->sequence;
+  char seqstr[100];
+  itoa(this->sequence, seqstr, 10);
+  headers += seqstr;
   headers += "\n";
   headers += "\n";
   bytes ret = prt::to_bytes(headers);
