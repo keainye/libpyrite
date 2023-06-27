@@ -26,9 +26,10 @@ std::string to_string(bytes& src) {
 }
 
 bytes to_bytes(const std::string& str) {
-  bytes ret(str.size());
+  bytes ret(str.size()+1);
   for (int i = 0; i < str.size(); i++)
     ret[i] = str[i];
+  ret[str.size()] = 0;
   return ret;
 }
 
