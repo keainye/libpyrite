@@ -51,6 +51,16 @@ bytes operator+(const bytes& v1, const bytes& v2) {
     ret[ptr++] = v2[i];
   return ret;
 }
+
+void print_as_hex(const bytes& raw) {
+  for (int i = 0; i < raw.size(); i++)
+    std::printf("%02x", raw[i]);
+}
+
+void println_as_hex(const bytes& raw) {
+  print_as_hex(raw);
+  std::printf("\n");
+}
 }  // namespace prt
 
 #endif
