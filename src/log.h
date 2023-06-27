@@ -1,3 +1,6 @@
+#ifndef _PRT_LOG
+#define _PRT_LOG
+
 #include "iostream"
 #include "string"
 
@@ -28,4 +31,5 @@ void panic(std::string msg) {
 }
 }  // namespace prt
 
+#endif
 #endif
