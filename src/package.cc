@@ -16,17 +16,12 @@ prt::package::package(prt::bytes raw) {
 }
 
 prt::bytes prt::package::to_bytes() {
-  std::string headers = this->session;
-  headers += "\n";
-  headers += this->identifier;
-  headers += "\n";
-  char seqstr[100];
-  itoa(this->sequence, seqstr, 10);
-  headers += seqstr;
-  headers += "\n";
-  headers += "\n";
-  bytes ret = prt::to_bytes(headers);
-  ret = range(ret, 0, ret.size()-1);
+  bytes ret(this->session);
+  ret = ret + bytes(this->identifier);
+  bytes seq(4);
+  for (int i = 0; i < 4; i++)
+    seq[i] = (moc::byte) (this->sequence >> (i*8));
+  ret = ret + seq;
   ret = ret + this->body;
   return ret;
 }
