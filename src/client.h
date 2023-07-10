@@ -1,3 +1,6 @@
+#ifndef _PRT_CLIENT_H
+#define _PRT_CLIENT_H
+
 #include <functional>
 #include <unordered_map>
 #include "mutex"
@@ -32,3 +35,5 @@ class client {
   prt::bytes promise(std::string identifer, bytes body);
 };
 }  // namespace prt
+
+#endif
