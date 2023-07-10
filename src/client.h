@@ -26,9 +26,9 @@ class client {
   client(const char* Ip, int port, int timeout);
   ~client();
   int start();
-  int tell(std::string identifier, std::string body);
+  int tell(std::string identifier, bytes body);
   bool add_router(std::string identifier,
                  std::function<bytes(bytes)> controller);
-  prt::bytes promise(std::string identifer, std::string body);
+  prt::bytes promise(std::string identifer, bytes body);
 };
 }  // namespace prt

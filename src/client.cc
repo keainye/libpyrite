@@ -40,7 +40,7 @@ prt::client::~client() {
   WSACleanup();
 }
 
-prt::bytes prt::client::promise(std::string identifier, std::string body) {
+prt::bytes prt::client::promise(std::string identifier, prt::bytes body) {
   prt::package req(this->session, identifier, this->get_sequence(), body);
   req.send_to(this->connection);
   this->promise_buffer[req.sequence] = req;
@@ -81,7 +81,7 @@ prt::bytes prt::client::promise(std::string identifier, std::string body) {
   return respbody;
 }
 
-int prt::client::tell(std::string identifier, std::string body) {
+int prt::client::tell(std::string identifier, prt::bytes body) {
   prt::package P(this->session, identifier, -1, body);
   P.send_to(this->connection);
 }
@@ -114,7 +114,7 @@ void prt::client::process(prt::bytes raw) {
   // tell 不需要回信
   if (req.sequence < 0)
     return;
-  
+
   // promise
   prt::package resp(req.session, "prt-ack", req.sequence, resp_body);
   resp.send_to(this->connection);
@@ -122,21 +122,22 @@ void prt::client::process(prt::bytes raw) {
 
 int prt::client::start() {
   if (connect(this->connection, (struct sockaddr*)&this->server,
-              sizeof(this->server)) == INVALID_SOCKET) {
-    std::cout << "connect error";
-    system("pause");
-    return 1;
-  }
+              sizeof(this->server)) == INVALID_SOCKET)
+    panic("connect error");
 
+  char recvBuff[prt::max_transmit_size];
   while (true) {
-    char recvBuff[prt::max_transmit_size];
-    memset(recvBuff, 0, sizeof(recvBuff));
-
-    if (recv(this->connection, recvBuff, sizeof(recvBuff), 0) <= 0) {
-      std::cout << "recv error";
-      break;
+    int recv_size = recv(this->connection, recvBuff, prt::max_transmit_size, 0);
+    if (recv_size < 0) {
+      warn("recv error.");
+      continue;
     }
-    std::string raw(recvBuff);
+
+    // copy to new raw bytes
+    bytes raw(recv_size);
+    for (int i = 0; i < recv_size; i++)
+      raw[i] = recvBuff[i];
+
     std::thread p(client::process, this, raw);
     p.detach();
   }
