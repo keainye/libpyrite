@@ -1,8 +1,6 @@
 #include "utils.h"
 #include "../src/package.h"
 
-using namespace prt;
-
 int main() {
   package p;
   p.session = "test session";
