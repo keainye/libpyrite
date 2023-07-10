@@ -3,6 +3,8 @@
 
 #include "string"
 #include "mocutils/byte.h"
+#include "winsock2.h"
+#include "define.h"
 
 namespace prt {
 typedef moc::bytes bytes;
@@ -22,6 +24,7 @@ class package {
 
   void set_body(std::string text);
   std::string body_as_string();
+  void send_to(SOCKET connection);
 };
 }  // namespace prt
 

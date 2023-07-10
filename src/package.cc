@@ -52,3 +52,14 @@ void prt::package::set_body(std::string text) {
 std::string prt::package::body_as_string() {
   return this->body.to_string();
 }
+
+void prt::package::send_to(SOCKET connection) {
+  bytes pkg_bytes = this->to_bytes();
+  if (pkg_bytes.size() > prt::max_transmit_size)
+    prt::panic("content overflowed");
+  
+  char msg[pkg_bytes.size()];
+  for (int i = 0; i < pkg_bytes.size(); i++)
+    msg[i] = pkg_bytes[i];
+  send(connection, msg, pkg_bytes.size(), 0);
+}
