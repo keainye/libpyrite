@@ -2,17 +2,17 @@
 #include "../src/package.h"
 
 int main() {
-  package p;
+  prt::package p;
   p.session = "test session";
   p.identifier = "test identifier";
   p.sequence = 2333;
-  p.body = to_bytes("test body");
+  p.body = prt::bytes("test body");
 
-  package p1;
+  prt::package p1;
   p1.session = "test session";
   p1.identifier = "test identifier";
   p1.sequence = 2333;
-  p1.body = to_bytes("test body");
+  p1.body = prt::bytes("test body");
 
   test(p == p1);
   p1.sequence = 2334;
@@ -24,8 +24,7 @@ int main() {
   test(!(p != p1));
   pass("bool package::operator!=");
 
-  package p2;
-  test(to_package(p2, p.to_bytes()));
+  prt::package p2(p.to_bytes());
   test(p == p2);
   pass("package convertion");
 
