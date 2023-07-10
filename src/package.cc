@@ -5,7 +5,14 @@ prt::package::package() {
   this->session = "";
   this->identifier = "";
   this->sequence = 0;
-  this->body = bytes(0);
+  this->body = prt::bytes(0);
+}
+
+prt::package::package(prt::bytes raw) {
+  this->session = raw.next_string();
+  this->identifier = raw.next_string();
+  this->sequence = raw.next_int32();
+  this->body = raw.range(raw.ptr, raw.size());
 }
 
 bool prt::to_package(package& pac, bytes raw) {

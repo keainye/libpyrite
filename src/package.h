@@ -14,6 +14,7 @@ class package {
   bytes body;
 
   package();
+  package(bytes raw);
   bytes to_bytes();
   bool operator==(const package& other);
   bool operator!=(const package& other);
