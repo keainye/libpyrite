@@ -1,10 +1,8 @@
 #include <../header/client.h>
-client::client(const char *Ip, int port, int timeout)
-{
+client::client(const char* Ip, int port, int timeout) {
   WSADATA data;
 
-  if (WSAStartup(MAKEWORD(2, 2), &data) != 0)
-  {
+  if (WSAStartup(MAKEWORD(2, 2), &data) != 0) {
     std::cout << "WSAStartup error";
   }
 
@@ -14,8 +12,7 @@ client::client(const char *Ip, int port, int timeout)
   addrServer.sin_addr.S_un.S_addr = inet_addr(Ip);
 
   SOCKET socketClient = socket(AF_INET, SOCK_DGRAM, 0);
-  if (socketClient == INVALID_SOCKET)
-  {
+  if (socketClient == INVALID_SOCKET) {
     std::cout << "socket create error";
   }
 
@@ -25,10 +22,9 @@ client::client(const char *Ip, int port, int timeout)
   this->timeout = timeout;
 }
 
-bool client::AddRouter(std::string identifier, std::function<std::string(std::string)>* controller)
-{
-  if (identifier.find("prt-") != 0)
-  {
+bool client::AddRouter(std::string identifier,
+                       std::function<std::string(std::string)>* controller) {
+  if (identifier.find("prt-") != 0) {
     return false;
   }
 
@@ -36,25 +32,21 @@ bool client::AddRouter(std::string identifier, std::function<std::string(std::st
   return true;
 }
 
-int client::getSequence()
-{
+int client::getSequence() {
   this->sequence += 1;
   return this->sequence - 1;
 }
 
-client::~client()
-{
+client::~client() {
   closesocket(this->connection);
   WSACleanup();
 }
 
-std::string client::Promise(std::string identifier, std::string body)
-{
+std::string client::Promise(std::string identifier, std::string body) {
   PrtPackage req(this->session, identifier, this->getSequence(), body);
   std::string str_req = req.ToBytes();
-  const char *sendingMessage = (char *)str_req.data();
-  if (sizeof(sendingMessage) > MAX_TRANSMIT_SIZE)
-  {
+  const char* sendingMessage = (char*)str_req.data();
+  if (sizeof(sendingMessage) > MAX_TRANSMIT_SIZE) {
     std::cout << "content overflowed" << std::endl;
     return "";
   }
@@ -64,22 +56,20 @@ std::string client::Promise(std::string identifier, std::string body)
   int time = this->timeout;
   std::mutex ch;
   bool lock = 0;
-  std::thread time([&](int time)
-                   {
-        Sleep(time);
-        ch.lock();
-        lock=1;
-        ch.unlock(); });
+  std::thread time([&](int time) {
+    Sleep(time);
+    ch.lock();
+    lock = 1;
+    ch.unlock();
+  });
   bool getlock;
   std::string respbody;
-  while (1)
-  {
+  while (1) {
     ch.lock();
     getlock = lock;
     ch.unlock();
     this->bufferL[req.Sequence]->lock();
-    if (this->promiseBuffer[req.Sequence].Identifier == "prt-ack")
-    {
+    if (this->promiseBuffer[req.Sequence].Identifier == "prt-ack") {
       respbody = this->promiseBuffer[req.Sequence].Body;
       this->promiseBuffer.erase(req.Sequence);
       this->bufferL[req.Sequence]->unlock();
@@ -89,8 +79,7 @@ std::string client::Promise(std::string identifier, std::string body)
     }
 
     this->bufferL[req.Sequence]->unlock();
-    if (getlock)
-    {
+    if (getlock) {
       delete (this->bufferL[req.Sequence]);
       this->bufferL.erase(req.Sequence);
       std::cout << "pyrite counterpart timeouted" << std::endl;
@@ -101,13 +90,11 @@ std::string client::Promise(std::string identifier, std::string body)
   return respbody;
 }
 
-int client::Tell(std::string identifier, std::string body)
-{
+int client::Tell(std::string identifier, std::string body) {
   PrtPackage P(this->session, identifier, -1, body);
   std::string strP = P.ToBytes();
-  const char *sendingMessage = (char *)strP.data();
-  if (sizeof(sendingMessage) > MAX_TRANSMIT_SIZE)
-  {
+  const char* sendingMessage = (char*)strP.data();
+  if (sizeof(sendingMessage) > MAX_TRANSMIT_SIZE) {
     std::cout << "content overflowed" << std::endl;
     return -1;
   }
@@ -115,10 +102,8 @@ int client::Tell(std::string identifier, std::string body)
   send(this->connection, sendingMessage, sizeof(sendingMessage), 0);
 }
 
-void client::processAck(PrtPackage p)
-{
-  if (this->promiseBuffer.find(p.Sequence) == this->promiseBuffer.end())
-  {
+void client::processAck(PrtPackage p) {
+  if (this->promiseBuffer.find(p.Sequence) == this->promiseBuffer.end()) {
     return;
   }
   this->bufferL[p.Sequence]->lock();
@@ -126,49 +111,41 @@ void client::processAck(PrtPackage p)
   this->bufferL[p.Sequence]->unlock();
 }
 
-void client::process(std::string raw)
-{
+void client::process(std::string raw) {
   PrtPackage req(raw);
-  if (req.Identifier == "invalid")
-  {
+  if (req.Identifier == "invalid") {
     return;
   }
 
   this->session = req.Session;
 
-  if (req.Identifier == "prt-ack")
-  {
+  if (req.Identifier == "prt-ack") {
     this->processAck(req);
   }
 
-  if (this->router.find(req.Identifier) == this->router.end())
-  {
+  if (this->router.find(req.Identifier) == this->router.end()) {
     return;
   }
 
   std::function<std::string(std::string)>* f = this->router[req.Identifier];
   std::string resp = (*f)(req.Body);
-  const char *sendingMessage = (char *)resp.data();
+  const char* sendingMessage = (char*)resp.data();
   send(this->connection, sendingMessage, sizeof(sendingMessage), 0);
 }
 
-int client::Start()
-{
-  if (connect(this->connection, (struct sockaddr *)&this->server,
-              sizeof(this->server)) == INVALID_SOCKET)
-  {
+int client::Start() {
+  if (connect(this->connection, (struct sockaddr*)&this->server,
+              sizeof(this->server)) == INVALID_SOCKET) {
     std::cout << "connect error";
     system("pause");
     return 1;
   }
 
-  while (1)
-  {
+  while (1) {
     char recvBuff[MAX_TRANSMIT_SIZE];
     memset(recvBuff, 0, sizeof(recvBuff));
 
-    if (recv(this->connection, recvBuff, sizeof(recvBuff), 0) <= 0)
-    {
+    if (recv(this->connection, recvBuff, sizeof(recvBuff), 0) <= 0) {
       std::cout << "recv error";
       break;
     }
