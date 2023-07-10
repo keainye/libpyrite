@@ -1,17 +1,17 @@
-#include <functional>
-#include <iostream>
-#include <unordered_map>
+// #include <functional>
+// #include <iostream>
+// #include <unordered_map>
 
-#include "prt_package.h"
-class server {
- private:
-  std::string ip;
-  std::unordered_map<std::string, std::function<std::string(std::string)>>
-      router;
-  int maxLifeTime;
-  int sessionlen;
+// #include "prt_package.h"
+// class server {
+//  private:
+//   std::string ip;
+//   std::unordered_map<std::string, std::function<std::string(std::string)>>
+//       router;
+//   int maxLifeTime;
+//   int sessionlen;
 
- public:
-  server(/* args */);
-  ~server();
-};
+//  public:
+//   server(/* args */);
+//   ~server();
+// };
