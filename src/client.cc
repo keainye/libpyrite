@@ -47,7 +47,7 @@ prt::bytes prt::client::promise(std::string identifier, prt::bytes body) {
   int time = this->timeout;
   std::mutex ch;
   bool lock = 0;
-  std::thread time([&](int time) {
+  std::thread _time([&](int time) {
     Sleep(time);
     ch.lock();
     lock = 1;
@@ -74,7 +74,7 @@ prt::bytes prt::client::promise(std::string identifier, prt::bytes body) {
       delete (this->bufferL[req.sequence]);
       this->bufferL.erase(req.sequence);
       std::cout << "pyrite counterpart timeouted" << std::endl;
-      return;
+      return bytes();
     }
   }
 
