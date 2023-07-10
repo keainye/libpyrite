@@ -2,9 +2,10 @@
 #define _PRT_PACKAGE
 
 #include "string"
-#include "byte.h"
+#include "mocutils/byte.h"
 
 namespace prt {
+typedef moc::bytes bytes;
 class package {
  public:
   std::string session;
