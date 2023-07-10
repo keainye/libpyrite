@@ -15,6 +15,13 @@ prt::package::package(prt::bytes raw) {
   this->body = raw.range(raw.ptr, raw.size());
 }
 
+prt::package::package(std::string session, std::string identifier, int sequence, bytes body) {
+  this->session = session;
+  this->identifier = identifier;
+  this->sequence = sequence;
+  this->body = body;
+}
+
 prt::bytes prt::package::to_bytes() {
   bytes ret(this->session);
   ret = ret + bytes(this->identifier);

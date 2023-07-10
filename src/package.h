@@ -15,6 +15,7 @@ class package {
 
   package();
   package(bytes raw);
+  package(std::string session, std::string identifier, int sequence, bytes body);
   bytes to_bytes();
   bool operator==(const package& other);
   bool operator!=(const package& other);
