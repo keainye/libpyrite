@@ -18,7 +18,6 @@ target("pyrite")
 
 target("test")
   set_kind("binary")
-  add_deps("pyrite")
   add_files("test/main.cc")
   add_packages("mocutils")
 
