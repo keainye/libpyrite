@@ -39,8 +39,9 @@ bool prt::package::operator!=(const prt::package& other) {
 }
 
 void prt::package::set_body(std::string text) {
-  this->body = prt::to_bytes(text);
+  this->body = bytes(text);
 }
+
 std::string prt::package::body_as_string() {
-  return to_string(this->body);
+  return this->body.to_string();
 }
