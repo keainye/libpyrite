@@ -82,8 +82,7 @@ prt::bytes prt::client::promise(std::string identifier, prt::bytes body) {
 }
 
 int prt::client::tell(std::string identifier, prt::bytes body) {
-  prt::package P(this->session, identifier, -1, body);
-  P.send_to(this->connection);
+  prt::package(this->session, identifier, -1, body).send_to(this->connection);
 }
 
 void prt::client::process_ack(prt::package p) {
