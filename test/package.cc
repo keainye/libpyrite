@@ -3,13 +3,11 @@
 
 int main() {
   prt::package p;
-  p.session = "test session";
   p.identifier = "test identifier";
   p.sequence = 2333;
   p.body = prt::bytes("test body");
 
   prt::package p1;
-  p1.session = "test session";
   p1.identifier = "test identifier";
   p1.sequence = 2333;
   p1.body = prt::bytes("test body");
