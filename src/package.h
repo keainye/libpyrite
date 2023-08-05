@@ -10,14 +10,13 @@ namespace prt {
 typedef moc::bytes bytes;
 class package {
  public:
-  std::string session;
+  i32 sequence;
   std::string identifier;
-  int sequence;
   bytes body;
 
   package();
   package(bytes raw);
-  package(std::string session, std::string identifier, int sequence, bytes body);
+  package(i32 sequence, std::string identifier, bytes body);
   bytes to_bytes();
   bool operator==(const package& other);
   bool operator!=(const package& other);
