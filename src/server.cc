@@ -42,3 +42,7 @@ bool prt::server::add_router(std::string identifier, std::function<bytes(sockadd
     return false;
   this->router[identifier] = ctrler;
 }
+
+void prt::server::tell(sockaddr_in client, std::string identifier, bytes body) {
+  package(-1, identifier, body).send_to(client);
+}

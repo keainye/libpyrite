@@ -23,7 +23,7 @@ class package {
 
   void set_body(std::string text);
   std::string body_as_string();
-  void send_to(SOCKET connection);
+  void send_to(sockaddr_in connection);
 };
 }  // namespace prt
 
