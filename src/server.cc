@@ -29,3 +29,10 @@ void prt::server::start() {
     this->process(client_addr, package(raw));
   }
 }
+
+void prt::server::process(sockaddr_in client, package recv) {
+  // process tell
+  if (this->router.find(recv.identifier) == this->router.end())
+    return;
+  this->router[recv.identifier](recv.body);
+}
