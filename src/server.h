@@ -23,7 +23,7 @@ class server {
   i64 max_lifetime;
   std::map<std::string, std::function<bytes(sockaddr_in, bytes)>> router;
   i64 timeout;
-  std::map<sockaddr_in, client_data> clients;
+  // std::map<sockaddr_in, client_data> clients;
 
  public:
   server(int _port, i64 _max_lifetime, i64 _timeout);
