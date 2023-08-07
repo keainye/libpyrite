@@ -36,3 +36,9 @@ void prt::server::process(sockaddr_in client, package recv) {
     return;
   this->router[recv.identifier](recv.body);
 }
+
+bool prt::server::add_router(std::string identifier, std::function<bytes(bytes)> ctrler) {
+  if (identifier.find("prt-") >= 0)
+    return false;
+  this->router[identifier] = ctrler;
+}
