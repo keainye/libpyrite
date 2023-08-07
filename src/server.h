@@ -9,13 +9,13 @@
 #include "winsock2.h"
 
 namespace prt {
-class client_data {
- public:
-  sockaddr_in addr;
-  i64 last_acpt;
-  i32 seq;
-  std::map<i32, moc::channel<package>> promises;
-};
+// class client_data {
+//  public:
+//   sockaddr_in addr;
+//   i64 last_acpt;
+//   i32 seq;
+//   std::map<i32, moc::channel<package>> promises;
+// };
 
 class server {
   struct sockaddr_in addr;
