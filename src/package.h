@@ -25,8 +25,13 @@ class package {
 
   void set_body(std::string text);
   std::string body_as_string();
-  void send_to(int connection);
+  void send_to(int socket_fd, int socket_addr);
 };
+
+typedef struct {
+  void *ptr;
+  package pkg;
+} ptr_package;
 }  // namespace prt
 
 #endif
