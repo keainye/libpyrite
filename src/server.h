@@ -10,6 +10,9 @@
 
 namespace prt {
 class server {
+  int server_fd, sequence;
+  sockaddr_in server_addr;
+  connection_state state;
  public:
   server(int port);
   void start();

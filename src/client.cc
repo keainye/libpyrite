@@ -24,7 +24,7 @@ prt::client::client(const char* ip, int port) {
   memset(&this->server_addr, 0, sizeof(this->server_addr));
   this->server_addr.sin_family = AF_INET;
   this->server_addr.sin_port = htons(port);
-  this->server_addr.sin_addr.s_addr = INADDR_ANY;
+  this->server_addr.sin_addr.s_addr = inet_addr(ip);
 
   this->sequence = 0;
   this->state = prt::established;
