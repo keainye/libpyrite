@@ -42,6 +42,11 @@ void prt::server::start() {
   }
 }
 
+bool prt::server::set_handler(std::string identifier, std::function<bytes(sockaddr_in, bytes)> handler) {
+  if (identifier.find("prt-") == 0)
+    return false;
+  this->router[identifier] = handler;
+  return true;
+}
 
-  // bool add_router(std::string identifier, std::function<bytes(int, bytes)> handler);
   // void tell(int client_id, std::string identifier, bytes body);

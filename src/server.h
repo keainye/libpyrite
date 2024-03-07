@@ -12,8 +12,9 @@ namespace prt {
 class server {
   int server_fd, sequence;
   sockaddr_in server_addr;
-  connection_state state;
+  std::map<std::string, std::function<bytes(sockaddr_in, bytes)>> router;
  public:
+  connection_state state;
   server(int port);
   void start();
   bool set_handler(std::string identifier, std::function<bytes(sockaddr_in, bytes)> handler);
