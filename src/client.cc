@@ -47,6 +47,13 @@ void prt::client::start() {
   }
 }
 
+bool prt::client::set_handler(std::string identifier, std::function<bytes(bytes)> handler) {
+  if (identifier.find("prt-") == 0)
+    return false;
+  this->router[identifier] = handler;
+  return true;
+}
+
 void *prt::client::process(void *_args) {
   assert(_args);
   ptr_package *args = (ptr_package *) _args;
