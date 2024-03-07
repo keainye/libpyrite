@@ -16,7 +16,8 @@ class server {
  public:
   server(int port);
   void start();
-  bool add_router(std::string identifier, std::function<bytes(int, bytes)> handler);
+  bool set_handler(std::string identifier, std::function<bytes(bytes)> handler);
+  static void *process(void *_args);
   void tell(int client_id, std::string identifier, bytes body);
   bytes promise(int client_id, std::string identifer, bytes body);
 };
