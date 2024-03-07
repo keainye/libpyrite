@@ -66,4 +66,7 @@ void *prt::server::process(void *_args) {
   return nullptr;
 }
 
-  // void tell(int client_id, std::string identifier, bytes body);
+void prt::server::tell(sockaddr_in client_addr, std::string identifier, bytes body) {
+  prt::package pkg(-1, identifier, body);
+  pkg.send_to(this->server_fd, client_addr);
+}
