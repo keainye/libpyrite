@@ -19,8 +19,9 @@ class client {
   connection_state state;
   client(const char* ip, int port, int timeout);
   ~client();
-  int start();
+  void start();
   bool add_router(std::string identifier, std::function<bytes(bytes)> handler);
+  static void *process(void *recv_pkg);
   int tell(std::string identifier, bytes body);
   bytes promise(std::string identifer, bytes body);
 };

@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include "pthread.h"
 
 #include "log.h"
 
@@ -30,4 +31,22 @@ prt::client::client(const char* ip, int port, int timeout) {
 
 prt::client::~client() {
   close(this->server_fd);
+}
+
+void prt::client::start() {
+  int recv_len;
+  socklen_t l;
+  pthread_t tid;
+  char buf[prt::max_transmit_size];
+
+  while (true) {
+    recv_len = recvfrom(this->server_fd, buf, prt::max_transmit_size, MSG_CONFIRM, (struct sockaddr *) &this->server_addr, &l);
+    prt::package *recv_pkg = new prt::package(prt::bytes(buf, recv_len));
+    pthread_create(&tid, NULL, this->process, recv_pkg);
+  }
+}
+
+void *prt::client::process(void *recv_pkg) {
+  // TODO: impl
+  return nullptr;
 }
