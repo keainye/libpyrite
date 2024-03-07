@@ -20,7 +20,7 @@ class client {
   int sequence;
  public:
   connection_state state;
-  client(const char* ip, int port, int timeout);
+  client(const char* ip, int port);
   ~client();
   void start();
   bool set_handler(std::string identifier, std::function<bytes(bytes)> handler);

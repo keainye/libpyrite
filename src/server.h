@@ -11,7 +11,7 @@
 namespace prt {
 class server {
  public:
-  server(int port, i64 timeout);
+  server(int port);
   void start();
   bool add_router(std::string identifier, std::function<bytes(int, bytes)> handler);
   void tell(int client_id, std::string identifier, bytes body);

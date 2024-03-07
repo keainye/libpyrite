@@ -12,7 +12,7 @@
 
 #include "log.h"
 
-prt::client::client(const char* ip, int port, int timeout) {
+prt::client::client(const char* ip, int port) {
   this->state = prt::closed;
   if ((this->server_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
     char warn_msg[100];
