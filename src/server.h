@@ -2,6 +2,7 @@
 #define _PRT_SERVER_H
 
 #include "functional"
+#include "map"
 
 #include "mocutils/channel.h"
 

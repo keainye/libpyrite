@@ -42,7 +42,9 @@ void prt::client::start() {
 
   while (true) {
     recv_len = recvfrom(this->server_fd, buf, prt::max_transmit_size, MSG_CONFIRM, (struct sockaddr *) &this->server_addr, &l);
-    process_args *args = new process_args {this, 0, prt::package(prt::bytes(buf, recv_len))};
+    process_args *args = new process_args;
+    args->ptr = this;
+    args->pkg = prt::package(prt::bytes(buf, recv_len));
     pthread_create(&tid, NULL, this->process, (void *) args);
   }
 }

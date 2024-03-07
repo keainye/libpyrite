@@ -49,4 +49,20 @@ bool prt::server::set_handler(std::string identifier, std::function<bytes(sockad
   return true;
 }
 
+void *prt::server::process(void *_args) {
+  assert(_args);
+  ptr_package *args = (ptr_package *) _args;
+  prt::server *server_ptr = (prt::server *) args->ptr;
+  prt::package recv_pkg = args->pkg;
+  delete args;
+  
+  if (!server_ptr->router.count(recv_pkg.identifier))
+    return nullptr;
+
+  prt::bytes reply = server_ptr->router[recv_pkg.identifier](recv_pkg.body);
+  if (reply.size())
+    recv_pkg.send_to(server_ptr->server_fd, server_ptr->server_addr);
+  return nullptr;
+}
+
   // void tell(int client_id, std::string identifier, bytes body);
