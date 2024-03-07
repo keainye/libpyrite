@@ -13,9 +13,9 @@ class server {
  public:
   server(int port, i64 timeout);
   void start();
-  bool add_router(std::string identifier, std::function<bytes(sockaddr_in, bytes)> ctrler);
-  void tell(sockaddr_in client, std::string identifier, bytes body);
-  bytes promise(sockaddr_in client, std::string identifer, bytes body);
+  bool add_router(std::string identifier, std::function<bytes(int, bytes)> handler);
+  void tell(int client_id, std::string identifier, bytes body);
+  bytes promise(int client_id, std::string identifer, bytes body);
 };
 };  // namespace prt
 
