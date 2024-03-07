@@ -26,6 +26,7 @@ prt::client::client(const char* ip, int port, int timeout) {
   this->server_addr.sin_port = htons(port);
   this->server_addr.sin_addr.s_addr = INADDR_ANY;
 
+  this->sequence = 0;
   this->state = prt::established;
 }
 
@@ -62,4 +63,9 @@ void *prt::client::process(void *_args) {
 
   recv_pkg.send_to(client_ptr->server_fd, client_ptr->server_addr);
   return nullptr;
+}
+
+void prt::client::tell(std::string identifier, bytes body) {
+  prt::package pkg(-1, identifier, body);
+  pkg.send_to(this->server_fd, this->server_addr);
 }

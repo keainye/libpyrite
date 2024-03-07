@@ -16,6 +16,8 @@ class client {
   int         server_fd;
   sockaddr_in server_addr;
   std::map<std::string, std::function<bytes(bytes)>> router;
+
+  int sequence;
  public:
   connection_state state;
   client(const char* ip, int port, int timeout);
@@ -23,7 +25,7 @@ class client {
   void start();
   bool set_handler(std::string identifier, std::function<bytes(bytes)> handler);
   static void *process(void *_args);
-  int tell(std::string identifier, bytes body);
+  void tell(std::string identifier, bytes body);
   bytes promise(std::string identifer, bytes body);
 };
 }  // namespace prt
