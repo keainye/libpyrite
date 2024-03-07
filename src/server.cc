@@ -37,7 +37,7 @@ void prt::server::start() {
 
   while (true) {
     recv_len = recvfrom(this->server_fd, buf, prt::max_transmit_size, 0, (struct sockaddr *) &client_addr, &l);
-    ptr_package *args = new ptr_package {this, prt::package(prt::bytes(buf, recv_len))};
+    ptr_package *args = new ptr_package {this, client_addr, prt::package(prt::bytes(buf, recv_len))};
     pthread_create(&tid, NULL, this->process, (void *) args);
   }
 }
@@ -54,14 +54,15 @@ void *prt::server::process(void *_args) {
   ptr_package *args = (ptr_package *) _args;
   prt::server *server_ptr = (prt::server *) args->ptr;
   prt::package recv_pkg = args->pkg;
+  sockaddr_in client_addr = args->addr;
   delete args;
   
   if (!server_ptr->router.count(recv_pkg.identifier))
     return nullptr;
 
-  prt::bytes reply = server_ptr->router[recv_pkg.identifier](recv_pkg.body);
+  prt::bytes reply = server_ptr->router[recv_pkg.identifier](client_addr, recv_pkg.body);
   if (reply.size())
-    recv_pkg.send_to(server_ptr->server_fd, server_ptr->server_addr);
+    recv_pkg.send_to(server_ptr->server_fd, client_addr);
   return nullptr;
 }
 
