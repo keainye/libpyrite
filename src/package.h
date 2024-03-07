@@ -17,6 +17,7 @@ class package {
 
   package();
   package(bytes raw);
+  package(package *old);
   package(i32 sequence, std::string identifier, bytes body);
   bytes to_bytes();
   bool operator==(const package& other);

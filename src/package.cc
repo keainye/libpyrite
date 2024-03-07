@@ -13,6 +13,13 @@ prt::package::package(prt::bytes raw) {
   this->body = raw.range(raw.ptr, raw.size());
 }
 
+prt::package::package(package *old) {
+  assert(old);
+  this->sequence   = old->sequence;
+  this->identifier = old->identifier;
+  this->body       = old->body;
+}
+
 prt::package::package(i32 sequence, std::string identifier, bytes body) {
   this->sequence = sequence;
   this->identifier = identifier;
