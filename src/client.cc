@@ -27,3 +27,7 @@ prt::client::client(const char* ip, int port, int timeout) {
 
   this->state = prt::established;
 }
+
+prt::client::~client() {
+  close(this->server_fd);
+}
