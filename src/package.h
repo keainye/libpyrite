@@ -34,8 +34,9 @@ class package {
 
 typedef struct {
   void *ptr;
+  sockaddr_in addr;
   package pkg;
-} ptr_package;
+} process_args;
 }  // namespace prt
 
 #endif
