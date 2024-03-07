@@ -46,7 +46,7 @@ std::string prt::package::body_as_string() {
   return this->body.to_string();
 }
 
-void prt::package::send_to(sockaddr_in connection) {
+void prt::package::send_to(int connection) {
   bytes pkg_bytes = this->to_bytes();
   if (pkg_bytes.size() > prt::max_transmit_size)
     prt::panic("content overflowed");

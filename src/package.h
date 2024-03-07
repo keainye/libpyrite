@@ -24,7 +24,7 @@ class package {
 
   void set_body(std::string text);
   std::string body_as_string();
-  void send_to(sockaddr_in connection);
+  void send_to(int connection);
 };
 }  // namespace prt
 

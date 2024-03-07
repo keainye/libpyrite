@@ -40,3 +40,6 @@ main.cc
 .xmake
 
 build
+
+# ctags
+.tags
