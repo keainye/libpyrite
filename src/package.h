@@ -2,6 +2,10 @@
 #define _PRT_PACKAGE
 
 #include "string"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
 
 #include "mocutils/byte.h"
 
@@ -25,7 +29,7 @@ class package {
 
   void set_body(std::string text);
   std::string body_as_string();
-  void send_to(int socket_fd, int socket_addr);
+  void send_to(int socket_fd, sockaddr_in socket_addr);
 };
 
 typedef struct {
