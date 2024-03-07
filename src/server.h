@@ -16,10 +16,10 @@ class server {
  public:
   server(int port);
   void start();
-  bool set_handler(std::string identifier, std::function<bytes(bytes)> handler);
+  bool set_handler(std::string identifier, std::function<bytes(sockaddr_in, bytes)> handler);
   static void *process(void *_args);
-  void tell(int client_id, std::string identifier, bytes body);
-  bytes promise(int client_id, std::string identifer, bytes body);
+  void tell(sockaddr_in client_addr, std::string identifier, bytes body);
+  bytes promise(sockaddr_in client_addr, std::string identifer, bytes body);
 };
 };  // namespace prt
 
