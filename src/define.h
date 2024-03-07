@@ -10,6 +10,10 @@ namespace prt {
   const int max_transmit_size = 1024;
   typedef moc::byte byte;
   typedef moc::bytes bytes;
+  enum connection_state {
+    closed,
+    established,
+  };
 }
 
 #endif
