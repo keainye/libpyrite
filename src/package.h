@@ -2,8 +2,9 @@
 #define _PRT_PACKAGE
 
 #include "string"
+
 #include "mocutils/byte.h"
-#include "winsock2.h"
+
 #include "define.h"
 
 namespace prt {

@@ -1,8 +1,6 @@
 #ifndef _PRT_CLIENT_H
 #define _PRT_CLIENT_H
 
-#include "winsock2.h"
-
 #include "define.h"
 #include "package.h"
 
