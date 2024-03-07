@@ -6,7 +6,7 @@ install: build
 	@-mkdir /usr/include/pyrite
 	@-mkdir /usr/lib/pyrite
 	cp src/*.h /usr/include/pyrite/
-	cp pyrite.a /usr/lib/pyrite/
+	cp libpyrite.a /usr/lib/pyrite/
 
 clean:
 	rm -rf *.o
