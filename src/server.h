@@ -10,11 +10,17 @@
 #include "define.h"
 
 namespace prt {
+struct _client_data {
+  int sequence;
+  std::map<int, moc::channel<prt::package>> promise_buf;
+};
+
 class server {
   int server_fd, sequence;
   sockaddr_in server_addr;
   std::map<std::string, std::function<bytes(sockaddr_in, bytes)>> router;
  public:
+  std::map<sockaddr_in, _client_data> client_data;
   connection_state state;
   server(int port);
   void start();
