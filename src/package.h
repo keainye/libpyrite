@@ -26,6 +26,7 @@ class package {
   bytes to_bytes();
   bool operator==(const package& other);
   bool operator!=(const package& other);
+  bool operator<(prt::package &other);
 
   void set_body(std::string text);
   std::string body_as_string();

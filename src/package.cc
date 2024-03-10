@@ -63,3 +63,17 @@ void prt::package::send_to(int socket_fd, sockaddr_in socket_addr) {
     msg[i] = pkg_bytes[i];
   sendto(socket_fd, msg, pkg_bytes.size(), 0, (struct sockaddr *)&socket_addr, sizeof(socket_addr));
 }
+
+bool prt::package::operator<(prt::package &other) {
+  auto b1 = this->to_bytes();
+  auto b2 = other.to_bytes();
+  int l = b1.size();
+  if (b2.size() < l)
+    l = b2.size();
+  for (int i = 0; i < l; i++)
+    if (b1[i] != b2[i])
+      return b1[i] < b2[i];
+  if (b2.size() > b1.size())
+    return true;
+  return false;
+}
