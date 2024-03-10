@@ -72,8 +72,10 @@ void *prt::server::process(void *_args) {
     return nullptr;
 
   prt::bytes reply = server_ptr->router[recv_pkg.identifier](_client_addr, recv_pkg.body);
-  if (reply.size())
-    recv_pkg.send_to(server_ptr->server_fd, _client_addr);
+  if (!reply.size())
+    return nullptr;
+  prt::package reply_pkg(recv_pkg.sequence, "prt-ack", reply);
+  reply_pkg.send_to(server_ptr->server_fd, _client_addr);
   return nullptr;
 }
 
