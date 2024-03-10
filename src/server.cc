@@ -54,25 +54,26 @@ void *prt::server::process(void *_args) {
   process_args *args = (process_args *) _args;
   prt::server *server_ptr = (prt::server *) args->ptr;
   prt::package recv_pkg = args->pkg;
-  sockaddr_in client_addr = args->addr;
+  sockaddr_in _client_addr = args->addr;
   delete args;
 
   // process prt ack
   if (recv_pkg.identifier == "prt-ack") {
+    prt::bytes client_addr(&_client_addr, sizeof(_client_addr));
     if (!server_ptr->client_data.count(client_addr))
       return nullptr;
-    if (!server_ptr->client_data[client_addr].promise_buf.count(recv_pkg.sequence))
+    if (!server_ptr->client_data[client_addr].promise_buf[recv_pkg.sequence])
       return nullptr;
-    server_ptr->client_data[client_addr].promise_buf[recv_pkg.sequence] < recv_pkg;
+    *server_ptr->client_data[client_addr].promise_buf[recv_pkg.sequence] < recv_pkg;
     return nullptr;
   }
   
   if (!server_ptr->router.count(recv_pkg.identifier))
     return nullptr;
 
-  prt::bytes reply = server_ptr->router[recv_pkg.identifier](client_addr, recv_pkg.body);
+  prt::bytes reply = server_ptr->router[recv_pkg.identifier](_client_addr, recv_pkg.body);
   if (reply.size())
-    recv_pkg.send_to(server_ptr->server_fd, client_addr);
+    recv_pkg.send_to(server_ptr->server_fd, _client_addr);
   return nullptr;
 }
 
@@ -81,14 +82,16 @@ void prt::server::tell(sockaddr_in client_addr, std::string identifier, bytes bo
   pkg.send_to(this->server_fd, client_addr);
 }
 
-prt::bytes prt::server::promise(sockaddr_in client_addr, std::string identifer, bytes body) {
+prt::bytes prt::server::promise(sockaddr_in _client_addr, std::string identifer, bytes body) {
+  prt::bytes client_addr(&_client_addr, sizeof(_client_addr));
   if (!this->client_data.count(client_addr))
     this->client_data[client_addr] = prt::_client_data{ .sequence = 0 };
   int seq = this->client_data[client_addr].sequence++;
   prt::package pkg(seq, identifer, body);
-  pkg.send_to(this->server_fd, client_addr);
-  this->client_data[client_addr].promise_buf[seq] = moc::channel<prt::package>;
+  pkg.send_to(this->server_fd, _client_addr);
+  this->client_data[client_addr].promise_buf[seq] = new moc::channel<prt::package>;
   prt::package reply;
-  this->client_data[client_addr].promise_buf[seq] > reply;
-  this->client_data[client_addr].promise_buf.erase(seq);
+  *this->client_data[client_addr].promise_buf[seq] > reply;
+  delete this->client_data[client_addr].promise_buf[seq];
+  return reply.body;
 }

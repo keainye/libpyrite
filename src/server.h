@@ -12,7 +12,7 @@
 namespace prt {
 struct _client_data {
   int sequence;
-  std::map<int, moc::channel<prt::package>> promise_buf;
+  std::map<int, moc::channel<prt::package>*> promise_buf;
 };
 
 class server {
@@ -20,14 +20,14 @@ class server {
   sockaddr_in server_addr;
   std::map<std::string, std::function<bytes(sockaddr_in, bytes)>> router;
  public:
-  std::map<sockaddr_in, _client_data> client_data;
+  std::map<prt::bytes, _client_data> client_data;
   connection_state state;
   server(int port);
   void start();
   bool set_handler(std::string identifier, std::function<bytes(sockaddr_in, bytes)> handler);
   static void *process(void *_args);
   void tell(sockaddr_in client_addr, std::string identifier, bytes body);
-  bytes promise(sockaddr_in client_addr, std::string identifer, bytes body);
+  bytes promise(sockaddr_in _client_addr, std::string identifer, bytes body);
 };
 };  // namespace prt
 

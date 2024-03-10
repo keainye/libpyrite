@@ -19,7 +19,7 @@ class client {
   sockaddr_in server_addr;
   std::map<std::string, std::function<bytes(bytes)>> router;
   int sequence;
-  std::map<std::int, moc::channel<prt::package>> promise_buf;
+  std::map<int, moc::channel<prt::package>*> promise_buf;
  public:
   connection_state state;
   client(const char* ip, int port);
