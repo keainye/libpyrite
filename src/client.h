@@ -8,6 +8,8 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
+#include "mocutils/channel.h"
+
 #include "define.h"
 #include "package.h"
 
@@ -16,8 +18,8 @@ class client {
   int         server_fd;
   sockaddr_in server_addr;
   std::map<std::string, std::function<bytes(bytes)>> router;
-
   int sequence;
+  std::map<std::int, moc::channel<prt::package>> promise_buf;
  public:
   connection_state state;
   client(const char* ip, int port);

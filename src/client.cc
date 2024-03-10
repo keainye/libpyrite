@@ -62,6 +62,13 @@ void *prt::client::process(void *_args) {
   prt::client *client_ptr = (prt::client *) args->ptr;
   prt::package recv_pkg = args->pkg;
   delete args;
+
+  // process prt ack
+  if (recv_pkg.identifier == "prt-ack") {
+    if (client_ptr->promise_buf.count(recv_pkg.sequence))
+      client_ptr->promise_buf[recv_pkg.sequence] < recv_pkg;
+    return nullptr;
+  }
   
   if (!client_ptr->router.count(recv_pkg.identifier))
     return nullptr;
@@ -75,4 +82,14 @@ void *prt::client::process(void *_args) {
 void prt::client::tell(std::string identifier, bytes body) {
   prt::package pkg(-1, identifier, body);
   pkg.send_to(this->server_fd, this->server_addr);
+}
+
+prt::bytes prt::client::promise(std::string identifer, bytes body) {
+  int seq = this->sequence++;
+  prt::package pkg(seq, identifer, body);
+  pkg.send_to(this->server_fd, this->server_addr);
+  this->promise_buf[seq] = moc::channel<prt::package>;
+  prt::package reply;
+  this->promise_buf[seq] > reply;
+  client_ptr->promise_buf.erase(seq);
 }
