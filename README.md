@@ -12,6 +12,10 @@ sudo make install
 make clean
 ```
 
+然后在你的 gcc 项目中加入如下参数：
+
+`-lmocutils -lpyrite`
+
 ## 使用
 
 **一个简单的示例**
