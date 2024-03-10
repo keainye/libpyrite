@@ -42,6 +42,19 @@ void prt::server::start() {
   }
 }
 
+namespace prt {
+void *server_async_runner(void *args) {
+  server *s = (server *) args;
+  s->start();
+  return nullptr;
+}
+};
+
+void prt::server::async() {
+  pthread_t tid;
+  pthread_create(&tid, NULL, server_async_runner, (void *) this);
+}
+
 bool prt::server::set_handler(std::string identifier, std::function<bytes(sockaddr_in, bytes)> handler) {
   if (identifier.find("prt-") == 0)
     return false;

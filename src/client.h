@@ -25,6 +25,7 @@ class client {
   client(const char* ip, int port);
   ~client();
   void start();
+  void async();
   bool set_handler(std::string identifier, std::function<bytes(bytes)> handler);
   static void *process(void *_args);
   void tell(std::string identifier, bytes body);

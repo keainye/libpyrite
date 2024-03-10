@@ -49,6 +49,19 @@ void prt::client::start() {
   }
 }
 
+namespace prt {
+void *client_async_runner(void *args) {
+  client *c = (client *) args;
+  c->start();
+  return nullptr;
+}
+};
+
+void prt::client::async() {
+  pthread_t tid;
+  pthread_create(&tid, NULL, client_async_runner, (void *) this);
+}
+
 bool prt::client::set_handler(std::string identifier, std::function<bytes(bytes)> handler) {
   if (identifier.find("prt-") == 0)
     return false;
