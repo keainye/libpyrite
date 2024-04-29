@@ -1,4 +1,5 @@
 ifeq ($(OS), Windows_NT)
+	OS = Windows
 	rm = del
 	cp = copy
 	d  = \\
@@ -15,7 +16,7 @@ else
 endif
 
 build: src/*.cc
-	g++ -c src/*.cc
+	g++ -c src/*.cc -I$(INCLUDE_DIR) -L$(LIB_DIRS) -lmocutils -D$(OS)
 	ar -crv libpyrite.a *.o
 
 install: build uninstall

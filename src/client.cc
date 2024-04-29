@@ -4,10 +4,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <cstring>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
 #include "pthread.h"
 
 #include "log.h"

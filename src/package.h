@@ -3,9 +3,16 @@
 
 #include "string"
 #include <sys/types.h>
+#ifdef Windows
+#include <winsock2.h>
+#include <windows.h>
+typedef int socklen_t;
+#define MSG_CONFIRM 0
+#else
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#endif
 
 #include "mocutils/byte.h"
 
