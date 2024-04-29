@@ -16,15 +16,15 @@ void panic(std::string msg) {
 
 namespace prt {
 void log(std::string msg) {
-  std::printf("[prt info] %s\n", msg);
+  std::printf("[I] %s\n", msg.c_str());
 }
 
 void warn(std::string msg) {
-  std::printf("[prt warn] %s\n", msg);
+  std::printf("[W] %s\n", msg.c_str());
 }
 
 void panic(std::string msg) {
-  std::printf("[prt error!] %s\n", msg);
+  std::printf("[E] %s\n", msg.c_str());
   exit(1);
 }
 }
