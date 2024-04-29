@@ -23,6 +23,7 @@ class server {
   std::map<prt::bytes, _client_data> client_data;
   connection_state state;
   server(int port);
+  ~server();
   void start();
   void async();
   bool set_handler(std::string identifier, std::function<bytes(sockaddr_in, bytes)> handler);

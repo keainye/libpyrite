@@ -8,6 +8,7 @@
 #include <windows.h>
 typedef int socklen_t;
 #define MSG_CONFIRM 0
+#pragma comment(lib, "ws2_32.lib")
 #else
 #include <sys/socket.h>
 #include <arpa/inet.h>

@@ -32,7 +32,7 @@ prt::client::~client() {
 
 void prt::client::start() {
   int recv_len;
-  socklen_t l;
+  socklen_t l = sizeof(this->server_addr);
   pthread_t tid;
   char buf[prt::max_transmit_size];
 

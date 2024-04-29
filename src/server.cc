@@ -8,6 +8,11 @@
 #include "log.h"
 
 prt::server::server(int port) {
+  #ifdef Windows
+  WSADATA data;
+  if (WSAStartup(MAKEWORD(2, 2), &data))
+    prt::panic("WSAStartup failed.");
+  #endif
   this->state = closed;
   if ((this->server_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     prt::panic("Pyrite bind port failed.");
@@ -22,17 +27,24 @@ prt::server::server(int port) {
 
   this->sequence = 0;
   this->state = prt::established;
+  prt::log("Server started.");
+}
+
+prt::server::~server() {
+  WSACleanup();
 }
 
 void prt::server::start() {
   int recv_len;
-  socklen_t l;
   sockaddr_in client_addr;
+  socklen_t l = sizeof(client_addr);
   pthread_t tid;
   char buf[prt::max_transmit_size];
 
   while (true) {
     recv_len = recvfrom(this->server_fd, buf, prt::max_transmit_size, 0, (struct sockaddr *) &client_addr, &l);
+    if (recv_len < 0)
+      prt::panic("Invalid recv_len.");
     process_args *args = new process_args {this, client_addr, prt::package(prt::bytes(buf, recv_len))};
     pthread_create(&tid, NULL, this->process, (void *) args);
   }
