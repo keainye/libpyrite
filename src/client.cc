@@ -9,10 +9,15 @@
 #include "log.h"
 
 prt::client::client(const char* ip, int port) {
+  #ifdef Windows
+    WSADATA data;
+    if (WSAStartup(MAKEWORD(2, 2), &data))
+      prt::panic("WSAStartup failed.");
+  #endif
   this->state = prt::closed;
   if ((this->server_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
     char warn_msg[100];
-    sprintf(warn_msg, "Pyrite connect creation failed. Server addr: %s:%d", ip, port);
+    sprintf(warn_msg, "Pyrite connect creation failed. Server addr: %s:%d.", ip, port);
     prt::warn(warn_msg);
     return;
   }
@@ -28,6 +33,9 @@ prt::client::client(const char* ip, int port) {
 
 prt::client::~client() {
   close(this->server_fd);
+  #ifdef Windows
+    WSACleanup();
+  #endif
 }
 
 void prt::client::start() {

@@ -31,7 +31,9 @@ prt::server::server(int port) {
 }
 
 prt::server::~server() {
-  WSACleanup();
+  #ifdef Windows
+    WSACleanup();
+  #endif
 }
 
 void prt::server::start() {
