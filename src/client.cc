@@ -45,7 +45,9 @@ void prt::client::start() {
   char buf[prt::max_transmit_size];
 
   while (true) {
-    recv_len = recvfrom(this->server_fd, buf, prt::max_transmit_size, MSG_CONFIRM, (struct sockaddr *) &this->server_addr, &l);
+    recv_len = recvfrom(this->server_fd, buf, prt::max_transmit_size, 0, (struct sockaddr *) &this->server_addr, &l);
+    if (recv_len < 0)
+      prt::panic("Invalid recv_len.");
     process_args *args = new process_args;
     args->ptr = this;
     args->pkg = prt::package(prt::bytes(buf, recv_len));
