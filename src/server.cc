@@ -45,8 +45,10 @@ void prt::server::start() {
 
   while (true) {
     recv_len = recvfrom(this->server_fd, buf, prt::max_transmit_size, 0, (struct sockaddr *) &client_addr, &l);
-    if (recv_len < 0)
-      prt::panic("Invalid recv_len.");
+    if (recv_len < 0) {
+      prt::warn("Invalid recv_len.");
+      continue;
+    }
     process_args *args = new process_args {this, client_addr, prt::package(prt::bytes(buf, recv_len))};
     pthread_create(&tid, NULL, this->process, (void *) args);
   }
