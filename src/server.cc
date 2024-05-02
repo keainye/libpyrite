@@ -92,7 +92,10 @@ void *prt::server::process(void *_args) {
     *server_ptr->client_data[client_addr].promise_buf[recv_pkg.sequence] < recv_pkg;
     return nullptr;
   }
-  
+
+  if (!server_ptr->router.count(recv_pkg.identifier))
+    recv_pkg.identifier = "*";
+
   if (!server_ptr->router.count(recv_pkg.identifier))
     return nullptr;
 

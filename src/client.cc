@@ -92,6 +92,9 @@ void *prt::client::process(void *_args) {
   }
   
   if (!client_ptr->router.count(recv_pkg.identifier))
+    recv_pkg.identifier = "*";
+
+  if (!client_ptr->router.count(recv_pkg.identifier))
     return nullptr;
 
   prt::bytes reply = client_ptr->router[recv_pkg.identifier](recv_pkg.body);
