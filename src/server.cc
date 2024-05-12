@@ -46,6 +46,9 @@ void prt::server::start() {
   while (true) {
     recv_len = recvfrom(this->server_fd, buf, prt::max_transmit_size, 0, (struct sockaddr *) &client_addr, &l);
     if (recv_len < 0) {
+      static int counter;
+      counter %= 32;
+      if (++counter) continue;
       prt::warn("Invalid recv_len.");
       continue;
     }
