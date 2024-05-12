@@ -7,7 +7,10 @@ ifeq ($(OS), Windows_NT)
 	INCLUDE_DIR = C:\include
 	LIB_DIRS = C:\lib
 else
+	OS = Linux
 	rm = rm
+	force = -f
+	recursion = -r
 	cp = cp
 	d  = /
 	mkdir = mkdir
@@ -27,14 +30,14 @@ install: build uninstall
 	@echo [ok] Installation finished.
 
 uninstall:
-	-$(rm) $(INCLUDE_DIR)$(d)pyrite
+	-$(rm) $(recursion) $(INCLUDE_DIR)$(d)pyrite
 	-$(foreach dir, $(LIB_DIRS), $(rm) $(dir)$(d)libpyrite.a)
 
 clean:
-	$(rm) *.o
-	$(rm) *.a
-	$(rm) *.cc
-	$(rm) *.h
+	$(rm) $(force) *.o
+	$(rm) $(force) *.a
+	$(rm) $(force) *.cc
+	$(rm) $(force) *.h
 
 copy:
 	$(cp) src$(d)* .
