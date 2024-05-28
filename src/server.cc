@@ -92,7 +92,7 @@ void *prt::server::process(void *_args) {
       return nullptr;
     if (!server_ptr->client_data[client_addr].promise_buf[recv_pkg.sequence])
       return nullptr;
-    *server_ptr->client_data[client_addr].promise_buf[recv_pkg.sequence] < recv_pkg;
+    *server_ptr->client_data[client_addr].promise_buf[recv_pkg.sequence] << recv_pkg;
     return nullptr;
   }
 
@@ -122,9 +122,9 @@ prt::bytes prt::server::promise(sockaddr_in _client_addr, std::string identifer,
   int seq = this->client_data[client_addr].sequence++;
   prt::package pkg(seq, identifer, body);
   pkg.send_to(this->server_fd, _client_addr);
-  this->client_data[client_addr].promise_buf[seq] = new moc::channel<prt::package>;
+  this->client_data[client_addr].promise_buf[seq] = makeptr(channel, prt::package);
   prt::package reply;
-  *this->client_data[client_addr].promise_buf[seq] > reply;
+  *this->client_data[client_addr].promise_buf[seq] >> reply;
   delete this->client_data[client_addr].promise_buf[seq];
   return reply.body;
 }

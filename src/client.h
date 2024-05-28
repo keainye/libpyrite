@@ -4,7 +4,7 @@
 #include "functional"
 #include "map"
 
-#include "mocutils/channel.h"
+#include <mocutils/channel.h>
 
 #include "define.h"
 #include "package.h"

@@ -88,7 +88,7 @@ void *prt::client::process(void *_args) {
   // process prt ack
   if (recv_pkg.identifier == "prt-ack") {
     if (client_ptr->promise_buf[recv_pkg.sequence])
-      *client_ptr->promise_buf[recv_pkg.sequence] < recv_pkg;
+      *client_ptr->promise_buf[recv_pkg.sequence] << recv_pkg;
     return nullptr;
   }
   
@@ -115,9 +115,9 @@ prt::bytes prt::client::promise(std::string identifer, bytes body) {
   int seq = this->sequence++;
   prt::package pkg(seq, identifer, body);
   pkg.send_to(this->server_fd, this->server_addr);
-  this->promise_buf[seq] = new moc::channel<prt::package>;
+  this->promise_buf[seq] = makeptr(channel, prt::package);
   prt::package reply;
-  *this->promise_buf[seq] > reply;
+  *this->promise_buf[seq] >> reply;
   delete this->promise_buf[seq];
   return reply.body;
 }
