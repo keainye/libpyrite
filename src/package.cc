@@ -1,5 +1,5 @@
 #include "package.h"
-#include "log.h"
+#include <mocutils/log.h>
 
 prt::package::package() {
   this->sequence = 0;
@@ -56,7 +56,7 @@ std::string prt::package::body_as_string() {
 void prt::package::send_to(int socket_fd, sockaddr_in socket_addr) {
   bytes pkg_bytes = this->to_bytes();
   if (pkg_bytes.size() > prt::max_transmit_size)
-    prt::panic("content overflowed");
+    moc::panic("content overflowed");
   
   char msg[pkg_bytes.size()];
   for (int i = 0; i < pkg_bytes.size(); i++)

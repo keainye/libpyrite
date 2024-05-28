@@ -6,19 +6,17 @@
 #include <cstring>
 #include "pthread.h"
 
-#include "log.h"
+#include <mocutils/log.h>
 
 prt::client::client(const char* ip, int port) {
   #ifdef Windows
     WSADATA data;
     if (WSAStartup(MAKEWORD(2, 2), &data))
-      prt::panic("WSAStartup failed.");
+      moc::panic("WSAStartup failed.");
   #endif
   this->state = prt::closed;
   if ((this->server_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-    char warn_msg[100];
-    sprintf(warn_msg, "Pyrite connect creation failed. Server addr: %s:%d.", ip, port);
-    prt::warn(warn_msg);
+    moc::warnf("Pyrite connect creation failed. Server addr: %s:%d.", ip, port);
     return;
   }
 
@@ -50,7 +48,7 @@ void prt::client::start() {
       static int counter;
       counter %= 32;
       if (++counter) continue;
-      prt::warn("Invalid recv_len.");
+      moc::warnf("invalid recv_len: %d.", recv_len);
       continue;
     }
     process_args *args = new process_args;

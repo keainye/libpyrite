@@ -5,17 +5,17 @@
 #include <unistd.h> 
 #include <string.h>
 
-#include "log.h"
+#include <mocutils/log.h>
 
 prt::server::server(int port) {
   #ifdef Windows
   WSADATA data;
   if (WSAStartup(MAKEWORD(2, 2), &data))
-    prt::panic("WSAStartup failed.");
+    moc::panic("WSAStartup failed.");
   #endif
   this->state = closed;
   if ((this->server_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-    prt::panic("Pyrite bind port failed.");
+    moc::panic("Pyrite bind port failed.");
 
   memset(&this->server_addr, 0, sizeof(struct sockaddr_in));
   this->server_addr.sin_family = AF_INET;
@@ -23,11 +23,11 @@ prt::server::server(int port) {
   this->server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
   if (bind(this->server_fd, (struct sockaddr *) &this->server_addr, sizeof(this->server_addr)) < 0)
-    prt::panic("Pyrite server binding failed.");
+    moc::panic("Pyrite server binding failed.");
 
   this->sequence = 0;
   this->state = prt::established;
-  prt::log("Server started.");
+  moc::logf("server started at port: %d.", port);
 }
 
 prt::server::~server() {
@@ -49,7 +49,7 @@ void prt::server::start() {
       static int counter;
       counter %= 32;
       if (++counter) continue;
-      prt::warn("Invalid recv_len.");
+      moc::warnf("invalid recv_len: %d.", recv_len);
       continue;
     }
     process_args *args = new process_args {this, client_addr, prt::package(prt::bytes(buf, recv_len))};
