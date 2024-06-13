@@ -27,7 +27,6 @@ prt::server::server(int port) {
 
   this->sequence = 0;
   this->state = prt::established;
-  moc::logf("server started at port: %d.", port);
 }
 
 prt::server::~server() {
