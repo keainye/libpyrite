@@ -1,10 +1,8 @@
 #ifndef _PRT_DEFINE_H
 #define _PRT_DEFINE_H
 
-#include "mocutils/byte.h"
-
-typedef long i32;
-typedef long long i64;
+#include <mocutils/byte.h>
+#include <mocutils/type.h>
 
 #define assert(expr) if (!expr) exit(1);
 
