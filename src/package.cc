@@ -11,6 +11,14 @@ prt::package::package() {
 prt::package::package(prt::bytes raw) {
 	this->sequence = raw.next_int32();
 	this->identifier = raw.next_string();
+	i32 header_num = raw.next_int32();
+	for (i32 i = 0; i < header_num; ++i) {
+		assert(raw.has_next());
+		auto key = raw.next_string();
+		assert(raw.has_next());
+		auto value = raw.next_string();
+		this->headers[key] = value;
+	}
 	this->body = raw.range(raw.ptr, raw.size());
 }
 
@@ -19,6 +27,7 @@ prt::package::package(package *old) {
 	this->sequence = old->sequence;
 	this->identifier = old->identifier;
 	this->body = old->body;
+	this->headers = old->headers;
 }
 
 prt::package::package(i32 sequence, std::string identifier, bytes body) {
@@ -32,6 +41,11 @@ prt::bytes prt::package::to_bytes() {
 	for (int i = 0; i < 4; i++)
 		ret[i] = (moc::byte)(this->sequence >> (i * 8));
 	ret = ret + bytes(this->identifier);
+	ret = ret + bytes(this->headers.size());
+	for (auto pair: this->headers) {
+		ret = ret + bytes(pair.first);
+		ret = ret + bytes(pair.second);
+	}
 	return ret + this->body;
 }
 

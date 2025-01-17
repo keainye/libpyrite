@@ -24,8 +24,11 @@ namespace prt {
 typedef moc::bytes bytes;
 class package {
  public:
-	i32 sequence;
-	std::string identifier;
+	i32         sequence;   // valid for promise (-1, when tell)
+	std::string identifier; // for handler router
+
+	std::map<std::string, std::string> headers;
+
 	bytes body;
 
 	package();
@@ -40,6 +43,9 @@ class package {
 	void set_body(std::string text);
 	std::string body_as_string();
 	void send_to(int socket_fd, sockaddr_in socket_addr);
+
+	bool set_header(std::string key, std::string value);
+	void del_header(std::string key);
 };
 
 typedef struct {
