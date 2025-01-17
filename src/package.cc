@@ -52,6 +52,12 @@ prt::bytes prt::package::to_bytes() {
 bool prt::package::operator==(const prt::package &other) {
 	if (other.sequence != this->sequence) return false;
 	if (other.identifier != this->identifier) return false;
+	for (auto pair: this->headers) {
+		if (other.headers.count(pair.first) == 0)
+			return false;
+		if (other.headers[pair.first] != pair.second)
+			return false;
+	}
 	if (other.body != this->body) return false;
 	return true;
 }
