@@ -106,7 +106,7 @@ void prt::package::debug_print() {
 	printf("  headers   : ");
 	if (this->headers.size() == 0)
 		printf("(None)");
-	else printf("%d", this->headers.size())
+	else printf("%d", this->headers.size());
 	printf("\n");
 	for (auto pair: this->headers)
 		printf("    %s: %s\n", pair.first.c_str(), pair.second.c_str());
