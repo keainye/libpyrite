@@ -41,7 +41,7 @@ prt::bytes prt::package::to_bytes() {
 	for (int i = 0; i < 4; i++)
 		ret[i] = (moc::byte)(this->sequence >> (i * 8));
 	ret = ret + bytes(this->identifier);
-	ret = ret + bytes(this->headers.size());
+	ret += (i32) this->headers.size();
 	for (auto pair: this->headers) {
 		ret = ret + bytes(pair.first);
 		ret = ret + bytes(pair.second);
@@ -97,4 +97,16 @@ bool prt::package::operator<(prt::package &other) {
 	if (b2.size() > b1.size())
 		return true;
 	return false;
+}
+
+void prt::package::debug_print() {
+	printf("<Pyrite Package debug info>\n");
+	printf("  sequence  : %d\n", this->sequence);
+	printf("  identifier: %s\n", this->identifier.c_str());
+	printf("  headers   : ");
+	if (this->headers.size() == 0)
+		printf("(None)");
+	printf("\n");
+	for (auto pair: this->headers)
+		printf("    %s: %s\n", pair.first.c_str(), pair.second.c_str());
 }
