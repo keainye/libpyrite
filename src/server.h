@@ -17,7 +17,7 @@ struct _client_data {
 class server {
 	int server_fd, sequence;
 	sockaddr_in server_addr;
-	std::map<std::string, std::function<bytes(sockaddr_in, bytes)>> router;
+	std::map<std::string, std::function<bytes(sockaddr_in, bytes&, std::map<std::string, std::string>&)>> router;
 
  public:
 	std::map<prt::bytes, _client_data> client_data;
@@ -26,10 +26,10 @@ class server {
 	~server();
 	void start();
 	void async();
-	bool set_handler(std::string identifier, std::function<bytes(sockaddr_in, bytes)> handler);
+	bool set_handler(std::string& identifier, std::function<bytes(sockaddr_in, bytes&, std::map<std::string, std::string>&)> handler);
 	static void *process(void *_args);
-	void tell(sockaddr_in client_addr, std::string identifier, bytes body);
-	bytes promise(sockaddr_in _client_addr, std::string identifer, bytes body);
+	void tell(sockaddr_in client_addr, std::string identifier, bytes body, std::map<std::string, std::string> headers);
+	bytes promise(sockaddr_in _client_addr, std::string identifer, bytes body, std::map<std::string, std::string> headers);
 };
 };	// namespace prt
 

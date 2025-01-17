@@ -68,7 +68,7 @@ void prt::server::async() {
 	pthread_create(&tid, NULL, server_async_runner, (void *)this);
 }
 
-bool prt::server::set_handler(std::string identifier, std::function<bytes(sockaddr_in, bytes)> handler) {
+bool prt::server::set_handler(std::string& identifier, std::function<bytes(sockaddr_in, bytes&, std::map<std::string, std::string>&)> handler) {
 	if (identifier.find("prt-") == 0)
 		return false;
 	this->router[identifier] = handler;
@@ -100,7 +100,7 @@ void *prt::server::process(void *_args) {
 	if (!server_ptr->router.count(recv_pkg.identifier))
 		return nullptr;
 
-	prt::bytes reply = server_ptr->router[recv_pkg.identifier](_client_addr, recv_pkg.body);
+	prt::bytes reply = server_ptr->router[recv_pkg.identifier](_client_addr, recv_pkg.body, recv_pkg.headers);
 	if (!reply.size())
 		return nullptr;
 	prt::package reply_pkg(recv_pkg.sequence, "prt-ack", reply);
@@ -108,17 +108,19 @@ void *prt::server::process(void *_args) {
 	return nullptr;
 }
 
-void prt::server::tell(sockaddr_in client_addr, std::string identifier, bytes body) {
+void prt::server::tell(sockaddr_in client_addr, std::string identifier, bytes body, std::map<std::string, std::string> headers) {
 	prt::package pkg(-1, identifier, body);
+	pkg.headers = headers;
 	pkg.send_to(this->server_fd, client_addr);
 }
 
-prt::bytes prt::server::promise(sockaddr_in _client_addr, std::string identifer, bytes body) {
+prt::bytes prt::server::promise(sockaddr_in _client_addr, std::string identifer, bytes body, std::map<std::string, std::string> headers) {
 	prt::bytes client_addr(&_client_addr, sizeof(_client_addr));
 	if (!this->client_data.count(client_addr))
 		this->client_data[client_addr] = prt::_client_data{.sequence = 0};
 	int seq = this->client_data[client_addr].sequence++;
 	prt::package pkg(seq, identifer, body);
+	pkg.headers = headers;
 	pkg.send_to(this->server_fd, _client_addr);
 	this->client_data[client_addr].promise_buf[seq] = makeptr(channel, prt::package);
 	prt::package reply;
