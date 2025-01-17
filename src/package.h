@@ -36,8 +36,8 @@ class package {
 	package(package *old);
 	package(i32 sequence, std::string identifier, bytes body);
 	bytes to_bytes();
-	bool operator==(const package &other);
-	bool operator!=(const package &other);
+	bool operator==(package &other);
+	bool operator!=(package &other);
 	bool operator<(prt::package &other);
 
 	void set_body(std::string text);

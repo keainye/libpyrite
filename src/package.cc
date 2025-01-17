@@ -49,7 +49,7 @@ prt::bytes prt::package::to_bytes() {
 	return ret + this->body;
 }
 
-bool prt::package::operator==(const prt::package &other) {
+bool prt::package::operator==(prt::package &other) {
 	if (other.sequence != this->sequence) return false;
 	if (other.identifier != this->identifier) return false;
 	for (auto pair: this->headers) {
@@ -62,7 +62,7 @@ bool prt::package::operator==(const prt::package &other) {
 	return true;
 }
 
-bool prt::package::operator!=(const prt::package &other) {
+bool prt::package::operator!=(prt::package &other) {
 	return !(this->operator==(other));
 }
 
