@@ -43,9 +43,6 @@ class package {
 	void set_body(std::string text);
 	std::string body_as_string();
 	void send_to(int socket_fd, sockaddr_in socket_addr);
-
-	bool set_header(std::string key, std::string value);
-	void del_header(std::string key);
 };
 
 typedef struct {
