@@ -22,7 +22,13 @@ build: src/*.cc
 	g++ -c src/*.cc -I$(INCLUDE_DIR) -L$(LIB_DIRS) -lmocutils -D$(OS)
 	ar -crv libpyrite.a *.o
 
-install: build uninstall
+test: install
+	g++ test/$(t).cc -o $(t).exe \
+		-I$(INCLUDE_DIR) -L$(LIB_DIRS) -lpyrite -lmocutils  -lws2_32 \
+		-D$(OS)
+	./$(t).exe
+
+install: build
 	-$(mkdir) $(INCLUDE_DIR)$(d)pyrite
 	$(cp) src$(d)*.h $(INCLUDE_DIR)$(d)pyrite$(d)
 	-$(foreach dir, $(LIB_DIRS), $(mkdir) $(dir))

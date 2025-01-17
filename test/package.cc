@@ -27,5 +27,17 @@ int main() {
 	test(p == p2);
 	pass("package convertion");
 
+	{
+		prt::package p;
+		p.headers["key"] = "value";
+		p.headers["value"] = "key";
+		auto b = p.to_bytes();
+		prt::package p1(b);
+		test(p == p1);
+		p1.headers["not needed"] = "1";
+		test(p != p1);
+		pass("package headers");
+	}
+
 	return 0;
 }
