@@ -8,6 +8,10 @@
 #include "map"
 #include "package.h"
 
+#define PRT_CLIENT_HANDLER(func_name) prt::bytes func_name( \
+	prt::bytes, \
+	std::map<std::string, std::string>&)
+
 namespace prt {
 class client {
 	int server_fd;
