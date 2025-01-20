@@ -72,7 +72,7 @@ void prt::client::async() {
 	pthread_create(&tid, NULL, client_async_runner, (void *)this);
 }
 
-bool prt::client::set_handler(std::string identifier, std::function<bytes(bytes)> handler) {
+bool prt::client::set_handler(std::string identifier, std::function<bytes(bytes, std::map<std::string, std::string>&)> handler) {
 	if (identifier.find("prt-") == 0)
 		return false;
 	this->router[identifier] = handler;
@@ -107,14 +107,16 @@ void *prt::client::process(void *_args) {
 	return nullptr;
 }
 
-void prt::client::tell(std::string identifier, bytes body) {
+void prt::client::tell(std::string identifier, bytes body, std::map<std::string, std::string> headers) {
 	prt::package pkg(-1, identifier, body);
+	pkg.headers = headers;
 	pkg.send_to(this->server_fd, this->server_addr);
 }
 
-prt::bytes prt::client::promise(std::string identifer, bytes body) {
+prt::bytes prt::client::promise(std::string identifer, bytes body, std::map<std::string, std::string> headers) {
 	int seq = this->sequence++;
 	prt::package pkg(seq, identifer, body);
+	pkg.headers = headers;
 	pkg.send_to(this->server_fd, this->server_addr);
 	this->promise_buf[seq] = makeptr(channel, prt::package);
 	prt::package reply;

@@ -12,7 +12,7 @@ namespace prt {
 class client {
 	int server_fd;
 	sockaddr_in server_addr;
-	std::map<std::string, std::function<bytes(bytes)>> router;
+	std::map<std::string, std::function<bytes(bytes, std::map<std::string, std::string>&)>> router;
 	int sequence;
 	std::map<int, moc::channel<prt::package> *> promise_buf;
 
@@ -22,10 +22,10 @@ class client {
 	~client();
 	void start();
 	void async();
-	bool set_handler(std::string identifier, std::function<bytes(bytes)> handler);
+	bool set_handler(std::string identifier, std::function<bytes(bytes, std::map<std::string, std::string>&)> handler);
 	static void *process(void *_args);
-	void tell(std::string identifier, bytes body);
-	bytes promise(std::string identifer, bytes body);
+	void tell(std::string identifier, bytes body, std::map<std::string, std::string> headers);
+	bytes promise(std::string identifer, bytes body, std::map<std::string, std::string> headers);
 };
 }	 // namespace prt
 
