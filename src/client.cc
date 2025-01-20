@@ -99,7 +99,7 @@ void *prt::client::process(void *_args) {
 	if (!client_ptr->router.count(recv_pkg.identifier))
 		return nullptr;
 
-	prt::bytes reply = client_ptr->router[recv_pkg.identifier](recv_pkg.body);
+	prt::bytes reply = client_ptr->router[recv_pkg.identifier](recv_pkg.body, recv_pkg.headers);
 	if (!reply.size())
 		return nullptr;
 	prt::package reply_pkg(recv_pkg.sequence, "prt-ack", recv_pkg.body);
