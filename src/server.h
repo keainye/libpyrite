@@ -37,7 +37,7 @@ class server {
 	void async();
 
 	bool set_handler(
-		std::string& identifier,
+		std::string identifier,
 		std::function<
 			bytes(
 				sockaddr_in,

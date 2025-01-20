@@ -68,7 +68,7 @@ void prt::server::async() {
 	pthread_create(&tid, NULL, server_async_runner, (void *)this);
 }
 
-bool prt::server::set_handler(std::string& identifier, std::function<bytes(sockaddr_in, bytes&, std::map<std::string, std::string>&)> handler) {
+bool prt::server::set_handler(std::string identifier, std::function<bytes(sockaddr_in, bytes&, std::map<std::string, std::string>&)> handler) {
 	if (identifier.find("prt-") == 0)
 		return false;
 	this->router[identifier] = handler;
