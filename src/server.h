@@ -8,6 +8,11 @@
 #include "map"
 #include "package.h"
 
+#define PRT_SERVER_HANDLER(func_name) prt::bytes func_name( \
+	sockaddr_in _client_addr, \
+	prt::bytes &_data, \
+	std::map<std::string, std::string> &_headers)
+
 namespace prt {
 struct _client_data {
 	int sequence;
