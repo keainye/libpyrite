@@ -9,8 +9,8 @@
 #include "package.h"
 
 #define PRT_CLIENT_HANDLER(func_name) prt::bytes func_name( \
-	prt::bytes, \
-	std::map<std::string, std::string>&)
+	prt::bytes &_data, \
+	std::map<std::string, std::string> &_headers)
 
 namespace prt {
 class client {
